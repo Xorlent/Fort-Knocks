@@ -71,6 +71,6 @@ Cloudflare Workers that provide port knock-like functionality to create dynamic 
 4. Attempt an SSLVPN connection to verify functionality
 
 ### Troubleshooting
-#### I have a user that entered the wrong authentication details when running the PowerShell script and now they are rate-limited and cannot authenticate for another 8 hours!
+#### I have a user that entered the wrong authentication details when running the PowerShell script and now they are rate-limited and cannot attempt to authenticate for another 8 hours!
 - IP addresses can be manually added to the SSLAUTHORIZED KV store within the Cloudflare dashboard under, "Storage & Databases"
   - Be sure to remove this entry manually at the end of the day, as it is not automatically pruned in 8 hours
