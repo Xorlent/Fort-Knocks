@@ -72,7 +72,7 @@ Cloudflare Workers that provide port knock-like functionality to create dynamic 
 4. Attempt an SSLVPN connection to verify functionality
 #### MacOS
 1. Download SSLVPNAuth.sh to a MacOS computer
-2. In a terminal, navigate to the location of the SSLVPNAuth.sh script, then run:
+2. In a terminal, navigate to the location of the SSLVPNAuth.sh script, then run:  
    ```chmod +x SSLVPNAuth.sh```
 4. Run SSLVPNAuth.sh, entering a valid username and pre-shared key, and base URI (https://vpn-auth.organization.workers.dev for this example) when prompted
 5. The shell script will then complete a request and return the result
