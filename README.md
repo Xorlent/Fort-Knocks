@@ -64,11 +64,20 @@ Cloudflare Workers that provide port knock-like functionality to create dynamic 
       - It is recommended to also add a static IP group or list that should always have access to the SSLVPN service
 
 ### Using/Testing
+#### Windows
 1. Download SSLVPNAuth.ps1 to a Windows computer
 2. Run SSLVPNAuth.ps1, entering a valid username and pre-shared key, and base URI (https://vpn-auth.organization.workers.dev for this example) when prompted
 3. The PowerShell script will then complete a request and return the result
    - If authentication was successful, the client IP address should be added to the allowlist within 2 minutes
 4. Attempt an SSLVPN connection to verify functionality
+#### MacOS
+1. Download SSLVPNAuth.sh to a MacOS computer
+2. In a terminal, navigate to the location of the SSLVPNAuth.sh script, then run:
+   ```chmod +x SSLVPNAuth.sh```
+4. Run SSLVPNAuth.sh, entering a valid username and pre-shared key, and base URI (https://vpn-auth.organization.workers.dev for this example) when prompted
+5. The shell script will then complete a request and return the result
+   - If authentication was successful, the client IP address should be added to the allowlist within 2 minutes
+6. Attempt an SSLVPN connection to verify functionality
 
 ### Troubleshooting
 #### I have a user that entered the wrong authentication details when running the PowerShell script and now they are rate-limited and cannot attempt to authenticate for another 8 hours!
