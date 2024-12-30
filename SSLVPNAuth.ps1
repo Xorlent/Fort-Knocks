@@ -81,11 +81,11 @@ if (-not $stored -or $useStored.ToUpper() -ne 'Y') {
     }
 }
 
-# Create SHA1 hash of username
-$sha1 = New-Object System.Security.Cryptography.SHA1CryptoServiceProvider
+# Create SHA256 hash of username
+$sha256 = New-Object System.Security.Cryptography.SHA256CryptoServiceProvider
 $utf8 = New-Object System.Text.UTF8Encoding
 $hash = [System.BitConverter]::ToString(
-    $sha1.ComputeHash($utf8.GetBytes($username))
+    $sha256.ComputeHash($utf8.GetBytes($username))
 ).Replace("-", "").ToLower()
 
 # Prepare the request
