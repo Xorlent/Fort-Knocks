@@ -6,12 +6,10 @@ _Cloudflare Worker-based solution providing port knock functionality for time-bo
     2. Produce a real-time IP allow list for a security device like a firewall to consume
 ### and a Powershell script that:
     1. Clients run to authenticate against the Cloudflare Worker to provide time-limited access to the desired resource
-    
 ### Requirements
 1. A firewall that supports external IP threat feeds (most do, including Cisco, Palo Alto, Fortinet)
 2. A Cloudflare account (https://www.cloudflare.com/)
    - Don't have one?  This solution can be deployed to even a free account!
-
 ### Cloudflare Setup
 > **_NOTE:_**  Naming within these instructions assume you are protecting an SSLVPN service.  Adjust the names if desired.
 1. Log in to your [Cloudflare dashboard](https://dash.cloudflare.com), choose your account, select "Storage & Databases" and click "KV."  
@@ -53,7 +51,6 @@ _Cloudflare Worker-based solution providing port knock functionality for time-bo
    - Click on the "Quick Edit" button at the top right area of the page  
      - Copy and paste the full contents of the vpn-allowlist.js file into the editor window
      - Edit the AllowedIPs string variable to include only IP addresses that should be permitted to retrieve the IP blocklist and click "Save and deploy."
-
 ### Firewall Setup
 1. Log in to your security device  
     - Configure an external threat list  
@@ -62,7 +59,6 @@ _Cloudflare Worker-based solution providing port knock functionality for time-bo
     - Set the fetch interval to 1 minute or 60 seconds
     - Apply this IP list to your SSLVPN portal allow rule
       - It is recommended to also add a static IP group or list that should always have access to the SSLVPN service
-
 ### Using/Testing
 #### Windows
 1. Download SSLVPNAuth.ps1 to a Windows computer
