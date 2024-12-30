@@ -79,4 +79,6 @@ _Cloudflare Worker-based solution providing port knock functionality for time-li
 #### I have a user that entered the wrong authentication details when running the PowerShell script and now they are rate-limited and cannot attempt to authenticate for another 8 hours!
 - IP addresses can be manually added to the SSLAUTHORIZED KV store within the Cloudflare dashboard under, "Storage & Databases"
   - Be sure to remove this entry manually at the end of the day, as it is not automatically pruned in 8 hours  
-  - This KV store can also be used to add persistent allowed IPs as desired -- Manual entires do not expire  
+  - This KV store can also be used to add persistent allowed IPs as desired -- Manual entires do not expire
+#### The Authorized IP list shows IPv4 addresses only and clients are connecting to an IPv6 endpoint!
+- This solution assumes we are protecting an IPv4 endpoint.  To protect an IPv6 endpoint, simply remove the "-4" immediately following the curl.exe command in each of the client scripts. 
