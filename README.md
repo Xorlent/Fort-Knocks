@@ -14,7 +14,7 @@ Cloudflare Workers that provide port knock-like functionality to create dynamic 
 
 ### Cloudflare Setup
 > **_NOTE:_**  Naming within these instructions assume you are protecting an SSLVPN service.  Adjust the names if desired.
-1. Log in to your [Cloudflare dashboard](https://dash.cloudflare.com), choose your account, select "Workers & Pages" and click "KV."  
+1. Log in to your [Cloudflare dashboard](https://dash.cloudflare.com), choose your account, select "Storage & Databases" and click "KV."  
 2. Click "Create a namespace," enter "SSLUSERS" for the name, and click "Add."  
 3. Click "Create a namespace," enter "SSLAUTHORIZED" for the name, and click "Add."  
 4. Now click on "Overview" below the "Workers & Pages" menu option.  
@@ -69,3 +69,8 @@ Cloudflare Workers that provide port knock-like functionality to create dynamic 
 3. The PowerShell script will then complete a request and return the result
    - If authentication was successful, the client IP address should be added to the allowlist within 2 minutes
 4. Attempt an SSLVPN connection to verify functionality
+
+### Troubleshooting
+#### I have a user that entered the wrong authentication details when running the PowerShell script and now they are rate-limited and cannot authenticate for another 8 hours!
+- IP addresses can be manually added to the SSLAUTHORIZED KV store within the Cloudflare dashboard under, "Storage & Databases"
+  - Be sure to remove this entry manually at the end of the day, as it is not automatically pruned in 8 hours
