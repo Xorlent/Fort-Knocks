@@ -1,2 +1,71 @@
 # Fort Knocks
-CloudFlare Workers that provide port knock-like functionality to create dynamic IP lists for access to sensitive public-facing services like an SSLVPN portal
+Cloudflare Workers that provide port knock-like functionality to create dynamic IP lists for access to sensitive public-facing services like an SSLVPN portal
+
+### Cloudflare workers that:
+    1. Authenticate client requests for time-limited access to a protected service
+    2. Produce a real-time IP allow list for a security device like a firewall to consume
+### and a Powershell script that:
+    1. Clients run to authenticate against the Cloudflare Worker to provide time-limited access to the desired resource
+    
+### Requirements
+1. A firewall that supports external IP threat feeds (most do, including Cisco, Palo Alto, Fortinet)
+2. A Cloudflare account (https://www.cloudflare.com/)
+   - Don't have one?  This solution can be deployed to even a free account!
+
+### Cloudflare Setup
+> **_NOTE:_**  Naming within these instructions assume you are protecting an SSLVPN service.  Adjust the names if desired.
+1. Log in to your [Cloudflare dashboard](https://dash.cloudflare.com), choose your account, select "Workers & Pages" and click "KV."  
+2. Click "Create a namespace," enter "SSLUSERS" for the name, and click "Add."  
+3. Click "Create a namespace," enter "SSLAUTHORIZED" for the name, and click "Add."  
+4. Now click on "Overview" below the "Workers & Pages" menu option.  
+5. Click "Create application"  
+    - Click the "Create Worker" button  
+    - Enter "vpn-auth" for the name and click "Deploy"  
+    - IMPORTANT: Make note of the URL shown on the Congratulations page under, "Preview your worker."  
+      - It will look something like https://vpn-auth.organization.workers.dev  
+      - You will need this URL to set up the Canary webhook  
+    - Click "Configure Worker"  
+      - Click "Settings" above the summary section of the page  
+      - Click the "Variables" menu option  
+      - Under "Variables and Secrets" click "Add" and select "Secret" for the Type  
+      - Enter "VPNAUTH" for the variable name and enter a pre-shared key of your choosing for the value (all authorized VPN users will need in order to authenticate to this service)  
+      - Under "KV Namespace Bindings" click "Add binding"  
+      - Enter "SSLUSERS" for the variable name and select "SSLUSERS" for the KV namespace  
+      - Click "Save and deploy"  
+      - Again, click "Add binding"  
+      - Enter "SSLAUTHORIZED" for the variable name and select "SSLAUTHORIZED" for the KV namespace  
+      - Click "Save and deploy"  
+    - Click on the "Quick Edit" button at the top right area of the page  
+      - Copy and paste the full contents of the vpn-knocking.ts file into the editor window  
+      - Click "Save and deploy."  
+6. Click "Create application"  
+    - Click the "Create Worker" button  
+    - Enter "vpn-allowlist" for the name and click "Deploy"
+    - IMPORTANT: Make note of the URL shown on the Congratulations page under, "Preview your worker."  
+      - It will look something like https://vpn-allowlist.organization.workers.dev  
+      - You will need this URL for the security device (eg. firewall) or program that will be consuming this IP list  
+    - Click "Configure Worker"  
+      - Click "Settings" above the summary section of the page  
+      - Click the "Variables" menu option  
+      - Under "KV Namespace Bindings" click "Add binding"  
+      - Enter "SSLAUTHORIZED" for the variable name and select "SSLAUTHORIZED" for the KV namespace  
+      - Click "Save and deploy"  
+   - Click on the "Quick Edit" button at the top right area of the page  
+     - Copy and paste the full contents of the vpn-allowlist.ts file into the editor window
+     - Edit the AllowedIPs string variable to include only IP addresses that should be permitted to retrieve the IP blocklist and click "Save and deploy."
+
+### Firewall Setup
+1. Log in to your security device  
+    - Configure an external threat list  
+    - Set the source to the allowlist worker (https://vpn-allowlist.organization.workers.dev in this example)
+      - No authentication is necessary, as the requests are filtered to only permitted IPs
+    - Set the fetch interval to 1 minute or 60 seconds
+    - Apply this IP list to your SSLVPN portal allow rule
+      - It is recommended to also add a static IP group or list that should always have access to the SSLVPN service
+
+### Using/Testing
+1. Download SSLVPNAuth.ps1 to a Windows computer
+2. Run SSLVPNAuth.ps1, entering a valid username and pre-shared key, and base URI (https://vpn-auth.organization.workers.dev for this example) when prompted
+3. The PowerShell script will then complete a request and return the result
+   - If authentication was successful, the client IP address should be added to the allowlist within 2 minutes
+4. Attempt an SSLVPN connection to verify functionality
