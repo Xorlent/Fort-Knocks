@@ -98,26 +98,26 @@ $headers = @{
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 try {
-    # Make the request
-    $response = Invoke-RestMethod -Uri $uri -Headers $headers -Method Get -ErrorAction Stop
-    Write-Host "Success! Please wait up to 2 minutes before connecting to the SSLVPN.  Your session will be valid for 8 hours." -ForegroundColor Green
+    # Make the request using curl with IPv4 flag
+    $response = curl.exe -4 -s -H "VPNAuth: $vpnAuth" $uri
+    if ($LASTEXITCODE -eq 0) {
+        Write-Host "Success! Please wait up to 2 minutes before connecting to the SSLVPN.  Your session will be valid for 8 hours." -ForegroundColor Green
+    } else {
+        throw "Curl request failed with exit code $LASTEXITCODE"
+    }
 }
 catch {
-    $statusCode = $_.Exception.Response.StatusCode.value__
-    
-    switch ($statusCode) {
-        401 { 
-            Write-Host "Authentication failed. Invalid pre-shared key." -ForegroundColor Red 
-        }
-        429 { 
-            $retryAfter = $_.Exception.Response.Headers["Retry-After"]
-            Write-Host "Rate limit exceeded.  Successful requests are valid for 8 hours." -ForegroundColor Yellow 
-        }
-        404 { 
-            Write-Host "Invalid username hash or key not found." -ForegroundColor Red 
-        }
-        default { 
-            Write-Host "Error occurred: $($_.Exception.Message)" -ForegroundColor Red 
-        }
+    # Check if the error message contains common HTTP status codes
+    if ($response -match "401") {
+        Write-Host "Authentication failed. Invalid pre-shared key." -ForegroundColor Red
+    }
+    elseif ($response -match "429") {
+        Write-Host "Rate limit exceeded. Successful requests are valid for 8 hours." -ForegroundColor Yellow
+    }
+    elseif ($response -match "404") {
+        Write-Host "Invalid username hash or key not found." -ForegroundColor Red
+    }
+    else {
+        Write-Host "Error occurred: $($_.Exception.Message)" -ForegroundColor Red
     }
 }
