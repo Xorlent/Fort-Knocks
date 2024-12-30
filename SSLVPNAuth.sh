@@ -62,7 +62,7 @@ make_request() {
     local uri=$1
     local vpn_auth=$2
     
-    response=$(curl -s -w "\n%{http_code}" "$uri" -H "VPNAuth: $vpn_auth")
+    response=$(curl -4 -s -w "\n%{http_code}" "$uri" -H "VPNAuth: $vpn_auth")
     http_code=$(echo "$response" | tail -n1)
     content=$(echo "$response" | sed '$d')
     
