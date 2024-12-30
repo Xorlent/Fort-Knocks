@@ -94,6 +94,9 @@ $headers = @{
     "VPNAuth" = $vpnAuth
 }
 
+# Force TLS 1.2
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
 try {
     # Make the request
     $response = Invoke-RestMethod -Uri $uri -Headers $headers -Method Get -ErrorAction Stop
