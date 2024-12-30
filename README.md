@@ -61,7 +61,7 @@ _Cloudflare Worker-based solution providing port knock functionality for time-bo
       - It is recommended to also add a static IP group or list that should always have access to the SSLVPN service
 ### Using/Testing
 #### Windows
-1. Download SSLVPNAuth.ps1 to a Windows computer
+1. Download SSLVPNAuth.ps1 to a Windows computer (Windows 10 1803 and later -- curl.exe is required)
 2. Run SSLVPNAuth.ps1, entering a valid username and pre-shared key, and base URI (https://vpn-auth.organization.workers.dev for this example) when prompted
 3. The PowerShell script will then complete a request and return the result
    - If authentication was successful, the client IP address should be added to the allowlist within 2 minutes
