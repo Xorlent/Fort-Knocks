@@ -4,7 +4,7 @@ _Cloudflare Worker-based solution providing port knock functionality for time-bo
 ### Cloudflare workers that:
     1. Authenticate client requests for time-limited access to a protected service
     2. Produce a real-time IP allow list for a security device like a firewall to consume
-### and a Powershell script that:
+### and Windows and MacOS scripts that:
     1. Clients run to authenticate against the Cloudflare Worker to provide time-limited access to the desired resource
 ### Requirements
 1. A firewall that supports external IP threat feeds (most do, including Cisco, Palo Alto, Fortinet)
