@@ -36,7 +36,7 @@ Cloudflare Workers that provide port knock-like functionality to create dynamic 
       - Enter "SSLAUTHORIZED" for the variable name and select "SSLAUTHORIZED" for the KV namespace  
       - Click "Save and deploy"  
     - Click on the "Quick Edit" button at the top right area of the page  
-      - Copy and paste the full contents of the vpn-knocking.ts file into the editor window  
+      - Copy and paste the full contents of the vpn-knocking.js file into the editor window  
       - Click "Save and deploy."  
 6. Click "Create application"  
     - Click the "Create Worker" button  
@@ -51,7 +51,7 @@ Cloudflare Workers that provide port knock-like functionality to create dynamic 
       - Enter "SSLAUTHORIZED" for the variable name and select "SSLAUTHORIZED" for the KV namespace  
       - Click "Save and deploy"  
    - Click on the "Quick Edit" button at the top right area of the page  
-     - Copy and paste the full contents of the vpn-allowlist.ts file into the editor window
+     - Copy and paste the full contents of the vpn-allowlist.js file into the editor window
      - Edit the AllowedIPs string variable to include only IP addresses that should be permitted to retrieve the IP blocklist and click "Save and deploy."
 
 ### Firewall Setup
