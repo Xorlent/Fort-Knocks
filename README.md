@@ -83,4 +83,4 @@ _Cloudflare Worker-based solution with port knock-like functionality for time-li
 #### The Authorized IP list shows IPv4 addresses only and clients are connecting to an IPv6 endpoint
 - This solution assumes we are protecting an IPv4 endpoint.  To protect an IPv6 endpoint, simply remove the "-4" immediately following the curl.exe command in each of the client scripts.
 #### I want to adjust the lifetime for successful authentication
-- Change the TTL values found on lines 44 and 67 in vpn-knocking.js  
+- Change the TTL values found on lines 44 and 68 in vpn-knocking.js  
