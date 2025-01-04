@@ -1,5 +1,5 @@
 # Fort Knocks
-_Cloudflare Worker-based solution with port knock-like functionality for time-limited access to public-facing services like an SSLVPN portal_  
+_Cloudflare Worker solution with port knock-like functionality for time-limited access to public-facing services like an SSLVPN portal_  
 ![Fort Knocks Image](https://github.com/Xorlent/Fort-Knocks/blob/8010b189ad012e2c6d395550cf6041b73037c1d2/img/FortKnocks.jpeg)
 ### Cloudflare workers that:
     1. Authenticate client requests for time-limited access to a protected service
