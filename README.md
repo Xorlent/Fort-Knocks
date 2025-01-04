@@ -5,7 +5,7 @@ _Cloudflare Worker solution with port knock-like functionality for time-limited 
     1. Authenticate client requests for time-limited access to a protected service
     2. Produce a real-time IP allow list for a security device like a firewall to consume
 ### and Windows and MacOS scripts that:
-    1. Clients run to authenticate against the Cloudflare Worker to provide time-limited access to the desired resource
+    1. Clients run to authenticate against the Cloudflare Worker to receive time-limited access to the desired resource
 ### Requirements
 1. A firewall that supports external IP threat feeds (most do, including Cisco, Palo Alto, Fortinet)
 2. A Cloudflare account (https://www.cloudflare.com/)
