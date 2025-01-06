@@ -2,7 +2,7 @@ addEventListener('fetch', event => {
   event.respondWith(handleRequest(event.request))
 })
 
-// Edit this string to include any source IP addresses that should be able to retrieve the IP blocklist.
+// Edit this string to include any source IP addresses that should be able to retrieve the current IP allowlist.
 const AllowedIPs = "1.2.3.4,5.6.7.8"
 
 async function handleRequest(request) {
