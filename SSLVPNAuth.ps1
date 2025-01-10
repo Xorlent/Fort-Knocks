@@ -99,9 +99,10 @@ $headers = @{
 
 try {
     # Make the request using curl with IPv4 flag
-    $response = curl.exe -4 -s -H "VPNAuth: $vpnAuth" $uri
+    $response = curl.exe -4 -s -w "%{http_code}" -H "VPNAuth: $vpnAuth" $uri
     if ($LASTEXITCODE -eq 0) {
         Write-Host "Success! Please wait up to 2 minutes before connecting to the SSLVPN.  Your session will be valid for 8 hours." -ForegroundColor Green
+        Read-Host -Prompt "Press ENTER to exit."
     } else {
         throw "Curl request failed with exit code $LASTEXITCODE"
     }
@@ -120,4 +121,5 @@ catch {
     else {
         Write-Host "Error occurred: $($_.Exception.Message)" -ForegroundColor Red
     }
+    Read-Host -Prompt "Press ENTER to exit."
 }
