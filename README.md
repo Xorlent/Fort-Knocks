@@ -62,10 +62,12 @@ _Cloudflare Worker solution with port knock-like functionality for time-limited 
 ### Using/Testing
 #### Windows
 1. Download SSLVPNAuth.ps1 to a Windows computer (Windows 10 1803 and later, as curl.exe is required)
-2. Run SSLVPNAuth.ps1, entering a valid username and pre-shared key, and base URI (https://vpn-auth.organization.workers.dev for this example) when prompted
-3. The PowerShell script will then complete a request and return the result
+2. Right-click the downloaded file, click "Properties"
+3. Click "Unblock," then "OK"
+4. Run SSLVPNAuth.ps1, entering a valid username and pre-shared key, and base URI (https://vpn-auth.organization.workers.dev for this example) when prompted
+5. The PowerShell script will then complete a request and return the result
    - If authentication was successful, the client IP address should be added to the allowlist within 2 minutes
-4. Attempt an SSLVPN connection to verify functionality
+6. Attempt an SSLVPN connection to verify functionality
 #### MacOS
 1. Download SSLVPNAuth.sh to a MacOS computer
 2. In a terminal, navigate to the location of the SSLVPNAuth.sh script, then run:  
