@@ -71,7 +71,8 @@ if ($stored) {
 
 # If no stored credentials or user wants new ones, prompt
 if (-not $stored -or $useStored.ToUpper() -ne 'Y') {
-    $username = Read-Host "Enter username"
+    $userentered = Read-Host "Enter username"
+    $username = $userentered.ToLower()
     $vpnAuth = Read-Host "Enter pre-shared key"
     $baseUri = Read-Host "Enter request URL (e.g., https://vpn-auth.organization.workers.dev)"
     
