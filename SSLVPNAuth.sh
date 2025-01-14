@@ -102,7 +102,8 @@ if get_stored_credentials; then
 fi
 
 if [ -z "$username" ] || [ -z "$vpn_auth" ] || [ -z "$base_uri" ]; then
-    read -p "Enter username: " username
+    read -p "Enter username: " userentered
+    username=$(echo ${userentered} | tr '[:upper:]' '[:lower:]')
     read -p "Enter pre-shared key: " vpn_auth
     read -p "Enter base URL (e.g., https://vpn-auth.organization.workers.dev): " base_uri
     
