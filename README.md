@@ -85,4 +85,4 @@ _Cloudflare Worker solution with port knock-like functionality for time-limited 
 #### The Authorized IP list shows IPv4 addresses only and clients are connecting via IPv6
 - This solution assumes we are dealing with IPv4.  To allow IPv6 client addresses, simply remove the "-4" immediately following the curl.exe command in each of the client scripts.
 #### I want to adjust the lifetime for successful authentication
-- Change the TTL values found on lines 44 and 68 in vpn-knocking.js  
+- Change the TTL values found on lines 71 and 95 in vpn-knocking.js  
