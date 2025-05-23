@@ -3,10 +3,11 @@ _Cloudflare Worker solution with port knock-like functionality for time-limited 
 ![Fort Knocks Image](https://github.com/Xorlent/Fort-Knocks/blob/8010b189ad012e2c6d395550cf6041b73037c1d2/img/FortKnocks.jpeg)
 ### Background
 User access controls and multifactor authentication are important, but what if the public-facing service itself has a pre-authentication vulnerability?  This tool implements a secure pre-authentication, pre-connection "knock" that dynamically adds the validated requestor's IP to a temporary allow list so they may connect to the protected service.
-### Cloudflare workers that:
+### Solution
+The solution is comprised of Cloudflare workers that:
   - Authenticate client requests for time-limited access to a protected service
   - Produce a real-time IP allow list for a security device like a firewall to consume
-### and Windows and MacOS scripts that:
+and Windows and MacOS scripts that:
   - Clients run to authenticate against the Cloudflare Worker to receive time-limited access to the desired resource
 ### Prerequisites
 1. A firewall that supports external IP threat feeds (most do, including Cisco, Palo Alto, Fortinet)
