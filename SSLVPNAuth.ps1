@@ -82,6 +82,8 @@ if (-not $stored -or $useStored.ToUpper() -ne 'Y') {
     }
 }
 
+Remove-Variable stored
+
 # Create SHA256 hash of username
 $sha256 = New-Object System.Security.Cryptography.SHA256CryptoServiceProvider
 $utf8 = New-Object System.Text.UTF8Encoding
@@ -89,11 +91,15 @@ $hash = [System.BitConverter]::ToString(
     $sha256.ComputeHash($utf8.GetBytes($username))
 ).Replace("-", "").ToLower()
 
+Remove-Variable username
+
 # Prepare the request
 $uri = "$baseUri/$hash"
 $headers = @{
     "VPNAuth" = $vpnAuth
 }
+
+Remove-Variable vpnAuth
 
 # Force TLS 1.2
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
@@ -104,7 +110,9 @@ try {
     if ($LASTEXITCODE -eq 0) {
         Write-Host "Success! Please wait up to 2 minutes before connecting to the SSLVPN.  Your session will be valid for 8 hours." -ForegroundColor Green
         Read-Host -Prompt "Press ENTER to exit."
+        [System.GC]::Collect()
     } else {
+        [System.GC]::Collect()
         throw "Curl request failed with exit code $LASTEXITCODE"
     }
 }
