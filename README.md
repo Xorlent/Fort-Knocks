@@ -16,7 +16,8 @@ User access controls and multifactor authentication are important, but what if t
 ### Cloudflare Setup
 > **_NOTE:_**  Naming within these instructions assume you are protecting an SSLVPN service.  Adjust the names if desired.
 1. Log in to your [Cloudflare dashboard](https://dash.cloudflare.com), choose your account, select "Storage & Databases" and click "KV."  
-2. Click "Create a namespace," enter "SSLUSERS" for the name, and click "Add."  
+2. Click "Create a namespace," enter "SSLUSERS" for the name, and click "Add."
+   - Add all valid usernames to this KV store; the key is the username (case insensitive) and the value can be any notes related to the user
 3. Click "Create a namespace," enter "SSLAUTHORIZED" for the name, and click "Add."  
 4. Now click on "Overview" below the "Workers & Pages" menu option.  
 5. Click "Create application"  
@@ -89,3 +90,5 @@ User access controls and multifactor authentication are important, but what if t
 - This solution assumes we are dealing with IPv4.  To allow IPv6 client addresses, simply remove the "-4" immediately following the curl.exe command in each of the client scripts.
 #### I want to adjust the lifetime for successful authentication
 - Change the TTL values found on lines 71 and 95 in vpn-knocking.js  
+#### Nothing is working
+- Did you add all valid usernames to the SSLUSERS KV store?  See step 2 under, "Cloudflare Setup"
