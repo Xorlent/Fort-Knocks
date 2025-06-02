@@ -29,7 +29,7 @@ User access controls and multifactor authentication are important, but what if t
       - Click "Settings" above the summary section of the page  
       - Click the "Variables" menu option  
       - Under "Variables and Secrets" click "Add" and select "Secret" for the Type  
-      - Enter "VPNAUTH" for the variable name and enter a pre-shared key of your choosing for the value (all authorized VPN users will need in order to authenticate to this service)  
+      - Enter "VPNAUTH" for the variable name and enter a pre-shared key of your choosing for the value (all authorized VPN users will need this in order to authenticate to the service)  
       - Under "KV Namespace Bindings" click "Add binding"  
       - Enter "SSLUSERS" for the variable name and select "SSLUSERS" for the KV namespace  
       - Click "Save and deploy"  
