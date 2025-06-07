@@ -5,7 +5,8 @@ _Cloudflare Worker solution with port knock-like functionality for time-limited 
 User access controls and multifactor authentication are important, but what if the public-facing service itself has a pre-authentication vulnerability?  This tool implements a secure pre-authentication, pre-connection "knock" that dynamically adds the validated requestor's IP to a temporary allow list so they may connect to the protected service.
 ### Solution
 #### The solution is comprised of Cloudflare workers that:
-  - Authenticate client requests for time-limited access to a protected service  
+  - Authenticate client requests for time-limited access to a protected service
+    - Includes strict brute force protection  
   - Produce a real-time IP allow list for a security device like a firewall to consume  
 #### and Windows and MacOS scripts that:
   - Clients run to authenticate against the Cloudflare Worker to receive time-limited access to the desired resource  
@@ -89,6 +90,7 @@ User access controls and multifactor authentication are important, but what if t
 #### The Authorized IP list shows IPv4 addresses only and clients are connecting via IPv6
 - This solution assumes we are dealing with IPv4.  To allow IPv6 client addresses, simply remove the "-4" immediately following the curl.exe command in each of the client scripts.
 #### I want to adjust the lifetime for successful authentication
-- Change the TTL values found on lines 71 and 95 in vpn-knocking.js  
+- Change the expirationTtl value (in seconds) found on line 124 in vpn-knocking.js  
 #### Nothing is working
 - Did you add all valid usernames to the SSLUSERS KV store?  See step 2 under, "Cloudflare Setup"
+- The pre-shared key value should be no more than 255 printable characters
