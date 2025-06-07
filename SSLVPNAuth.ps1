@@ -56,9 +56,19 @@ function Save-Credentials {
     Write-Host "Credentials saved securely to $configPath" -ForegroundColor Green
 }
 
+function ConvertTo-UTF8Bytes {
+    param([string]$InputString)
+    $encoding = [System.Text.Encoding]::UTF8
+    return $encoding.GetBytes($InputString)
+}
+
+function ConvertTo-HexString {
+    param([byte[]]$Bytes)
+    return [System.BitConverter]::ToString($Bytes).Replace("-", "").ToLower()
+}
+
 # Try to get stored credentials
 $stored = Get-StoredCredentials
-$baseUri = ""
 
 if ($stored) {
     $useStored = Read-Host "Found stored credentials. Use them? (Y/N)"
@@ -84,51 +94,58 @@ if (-not $stored -or $useStored.ToUpper() -ne 'Y') {
 
 Remove-Variable stored
 
-# Create SHA256 hash of username
-$sha256 = New-Object System.Security.Cryptography.SHA256CryptoServiceProvider
-$utf8 = New-Object System.Text.UTF8Encoding
-$hash = [System.BitConverter]::ToString(
-    $sha256.ComputeHash($utf8.GetBytes($username))
-).Replace("-", "").ToLower()
+$Salt = 'default-salt-value'
 
-Remove-Variable username
+# Create salted input
+$saltedInput = "${username}:${Salt}"
 
-# Prepare the request
-$uri = "$baseUri/$hash"
-$headers = @{
-    "VPNAuth" = $vpnAuth
-}
+# Convert to UTF-8 bytes
+$bytes = ConvertTo-UTF8Bytes -InputString $saltedInput
 
-Remove-Variable vpnAuth
+# Calculate SHA-256 hash
+$sha256 = [System.Security.Cryptography.SHA256]::Create()
+$hashBytes = $sha256.ComputeHash($bytes)
+$hashHex = ConvertTo-HexString -Bytes $hashBytes
+
+# Construct the URL
+$uri = "$baseUri/$hashHex"
 
 # Force TLS 1.2
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
+# Make the request using curl with IPv4 flag
 try {
-    # Make the request using curl with IPv4 flag
     $response = curl.exe -4 -s -w "%{http_code}" -H "VPNAuth: $vpnAuth" $uri
-    if ($LASTEXITCODE -eq 0) {
-        Write-Host "Success! Please wait up to 2 minutes before connecting to the SSLVPN.  Your session will be valid for 8 hours." -ForegroundColor Green
-        Read-Host -Prompt "Press ENTER to exit."
-        [System.GC]::Collect()
-    } else {
-        [System.GC]::Collect()
-        throw "Curl request failed with exit code $LASTEXITCODE"
+    $httpResponse = $response.Trim()
+    $httpResult = $httpResponse.Substring($httpResponse.Length - 3)
+
+    Remove-Variable vpnAuth
+    Remove-Variable uri
+    Remove-Variable hashHex
+    Remove-Variable hashBytes
+    Remove-Variable saltedInput
+
+    switch ($httpResult) {
+        "200" {
+            Write-Host "Success! Please wait up to 2 minutes before connecting to the SSLVPN. Your session will be valid for 8 hours." -ForegroundColor Green
+        }
+        "401" {
+            Write-Host "Authentication failed. Invalid pre-shared key." -ForegroundColor Red
+        }
+        "404" {
+            Write-Host "Invalid username hash or key not found." -ForegroundColor Red
+        }
+        "429" {
+            Write-Host "Rate limit exceeded. Try again later." -ForegroundColor Yellow
+        }
+        default {
+            Write-Host "Unexpected response from server (HTTP $httpCode)" -ForegroundColor Red
+        }
     }
 }
 catch {
-    # Check if the error message contains common HTTP status codes
-    if ($response -match "401") {
-        Write-Host "Authentication failed. Invalid pre-shared key." -ForegroundColor Red
-    }
-    elseif ($response -match "429") {
-        Write-Host "Rate limit exceeded. Successful requests are valid for 8 hours." -ForegroundColor Yellow
-    }
-    elseif ($response -match "404") {
-        Write-Host "Invalid username hash or key not found." -ForegroundColor Red
-    }
-    else {
-        Write-Host "Error occurred: $($_.Exception.Message)" -ForegroundColor Red
-    }
-    Read-Host -Prompt "Press ENTER to exit."
+    Write-Host "Error occurred: $($_.Exception.Message)" -ForegroundColor Red
+}
+finally {
+    [System.GC]::Collect()
 }
