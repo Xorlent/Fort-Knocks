@@ -82,6 +82,13 @@ User access controls and multifactor authentication are important, but what if t
    - If authentication was successful, the client IP address should be added to the allowlist within 2 minutes
 6. Attempt an SSLVPN connection to verify functionality
 
+### Advanced Features
+#### Paranoid mode
+- To help prevent dictionary attacks against hased username request URLs, each source file has an admin-configurable salt value.  These must all match:
+  - vpn_knocking.js line 112
+  - SSLVPNAuth.sh line 14
+  - SSLVPNAuth.ps1 line 97
+
 ### Troubleshooting
 #### I have a user that entered the wrong authentication details when running the PowerShell script and now they are rate-limited and cannot attempt to authenticate for another 8 hours!
 - IP addresses can be manually added to the SSLAUTHORIZED KV store within the Cloudflare dashboard under, "Storage & Databases"
