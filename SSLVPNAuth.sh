@@ -10,31 +10,46 @@ RED='\033[0;31m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
+# Default salt value
+SALT="default-salt-value"
+
 # Function to get value from keychain
-get_from_keychain() {
-    local key=$1
-    security find-generic-password -a "$USER" -s "${KEYCHAIN_NAME}_${key}" -w 2>/dev/null
+get_keychain_value() {
+    local key="$1"
+    security find-generic-password -a "$USER" -s "$key" -w 2>/dev/null
 }
 
 # Function to save value to keychain
 save_to_keychain() {
-    local key=$1
-    local value=$2
-    security add-generic-password -a "$USER" -s "${KEYCHAIN_NAME}_${key}" -w "$value" 2>/dev/null
+    local key="$1"
+    local value="$2"
+    security add-generic-password -a "$USER" -s "$key" -w "$value" 2>/dev/null
 }
 
-# Function to get stored credentials
-get_stored_credentials() {
-    if [ -f "$CONFIG_FILE" ]; then
-        username=$(get_from_keychain "username")
-        vpn_auth=$(get_from_keychain "vpnauth")
-        base_uri=$(get_from_keychain "uri")
-        
-        if [ -n "$username" ] && [ -n "$vpn_auth" ] && [ -n "$base_uri" ]; then
-            return 0
-        fi
-    fi
-    return 1
+# Function to prompt for credentials
+prompt_for_credentials() {
+    # Prompt for username
+    read -p "Enter username: " USERNAME
+    while [ -z "$USERNAME" ]; do
+        echo "Error: Username is required"
+        read -p "Enter username: " USERNAME
+    done
+
+    # Prompt for VPNAuth key
+    read -sp "Enter pre-shared key: " VPNAUTH
+    echo
+    while [ -z "$VPNAUTH" ]; do
+        echo "Error: Pre-shared key is required"
+        read -sp "Enter pre-shared key: " VPNAUTH
+        echo
+    done
+
+    # Prompt for URI
+    read -p "Enter VPN URL (e.g., https://vpn-auth.organization.workers.dev): " URI
+    while [ -z "$URI" ]; do
+        echo "Error: VPN URL is required"
+        read -p "Enter VPN URL: " URI
+    done
 }
 
 # Function to save credentials
@@ -43,9 +58,9 @@ save_credentials() {
     local vpn_auth=$2
     local base_uri=$3
     
-    save_to_keychain "username" "$username"
-    save_to_keychain "vpnauth" "$vpn_auth"
-    save_to_keychain "uri" "$base_uri"
+    save_to_keychain "vpn_username" "$username"
+    save_to_keychain "vpn_auth" "$vpn_auth"
+    save_to_keychain "vpn_uri" "$base_uri"
     
     touch "$CONFIG_FILE"
     echo -e "${GREEN}Credentials saved securely to Keychain${NC}"
@@ -74,15 +89,10 @@ make_request() {
             echo -e "${RED}Authentication failed. Invalid pre-shared key.${NC}"
             ;;
         429)
-            echo -e "${YELLOW}Rate limit exceeded. Try again in 8 hours.${NC}"
+            echo -e "${YELLOW}Rate limit exceeded. Try again later.${NC}"
             ;;
         404)
             echo -e "${RED}Invalid username hash or key not found.${NC}"
-            ;;
-        500)
-            echo -e "${RED}Server error occurred. Details:${NC}"
-            echo -e "${RED}URI: $uri${NC}"
-            echo -e "${RED}Response: $content${NC}"
             ;;
         *)
             echo -e "${RED}Error occurred: HTTP $http_code${NC}"
@@ -91,30 +101,40 @@ make_request() {
     esac
 }
 
-# Main script
-if get_stored_credentials; then
-    read -p "Found stored credentials. Use them? (Y/N): " use_stored
-    if [ "${use_stored:0:1}" = "Y" ] || [ "${use_stored:0:1}" = "y" ]; then
-        username=$(get_from_keychain "username")
-        vpn_auth=$(get_from_keychain "vpnauth")
-        base_uri=$(get_from_keychain "uri")
+# Check for saved credentials
+SAVED_USERNAME=$(get_keychain_value "vpn_username")
+SAVED_VPNAUTH=$(get_keychain_value "vpn_auth")
+SAVED_URI=$(get_keychain_value "vpn_uri")
+
+if [ -n "$SAVED_USERNAME" ] && [ -n "$SAVED_VPNAUTH" ] && [ -n "$SAVED_URI" ]; then
+    read -p "Use saved credentials? (y/n): " USE_SAVED
+    if [ "$USE_SAVED" = "y" ]; then
+        USERNAME="$SAVED_USERNAME"
+        VPNAUTH="$SAVED_VPNAUTH"
+        URI="$SAVED_URI"
+    else
+        prompt_for_credentials
+        read -p "Save these credentials? (y/n): " SAVE_CREDS
+        if [ "$SAVE_CREDS" = "y" ]; then
+            save_credentials "$USERNAME" "$VPNAUTH" "$URI"
+        fi
+    fi
+else
+    prompt_for_credentials
+    read -p "Save these credentials? (y/n): " SAVE_CREDS
+    if [ "$SAVE_CREDS" = "y" ]; then
+        save_credentials "$USERNAME" "$VPNAUTH" "$URI"
     fi
 fi
 
-if [ -z "$username" ] || [ -z "$vpn_auth" ] || [ -z "$base_uri" ]; then
-    read -p "Enter username: " userentered
-    username=$(echo ${userentered} | tr '[:upper:]' '[:lower:]')
-    read -p "Enter pre-shared key: " vpn_auth
-    read -p "Enter base URL (e.g., https://vpn-auth.organization.workers.dev): " base_uri
-    
-    read -p "Save credentials for future use? (Y/N): " save_creds
-    if [ "${save_creds:0:1}" = "Y" ] || [ "${save_creds:0:1}" = "y" ]; then
-        save_credentials "$username" "$vpn_auth" "$base_uri"
-    fi
-fi
+# Create salted input
+SALTED_INPUT="${USERNAME}:${SALT}"
 
-# Create hash and make request
-hash=$(create_hash "$username")
-uri="${base_uri}/${hash}"
+# Calculate SHA-256 hash using UTF-8 encoding
+HASH=$(printf '%s' "$SALTED_INPUT" | openssl dgst -sha256 -hex | cut -d' ' -f2)
 
-make_request "$uri" "$vpn_auth"
+# Construct the URL
+URL="${URI%/}/$HASH"
+
+# Make the request
+make_request "$URL" "$VPNAUTH"
