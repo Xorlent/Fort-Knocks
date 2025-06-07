@@ -99,5 +99,5 @@ User access controls and multifactor authentication are important, but what if t
 #### I want to adjust the lifetime for successful authentication
 - Change the expirationTtl value (in seconds) found on line 124 in vpn-knocking.js  
 #### Nothing is working
-- Did you add all valid usernames to the SSLUSERS KV store?  See step 2 under, "Cloudflare Setup"
+- Did you add valid usernames to the SSLUSERS KV store?  See step 2 under, "Cloudflare Setup"
 - The pre-shared key value should be no more than 255 printable characters
