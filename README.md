@@ -98,6 +98,7 @@ User access controls and multifactor authentication are important, but what if t
 #### Paranoid mode
 - To help prevent dictionary attacks against hashed username request URLs, each source file has an admin-configurable salt value.  These must all match:
   - vpn_knocking.js line 112
+  - background.js line 2
   - SSLVPNAuth.sh line 14
   - SSLVPNAuth.ps1 line 97
 
