@@ -8,7 +8,7 @@ User access controls and multifactor authentication are important, but what if t
   - Authenticate client requests for time-limited access to a protected service
     - Includes strict brute force protection  
   - Produce a real-time IP allow list for a security device like a firewall to consume  
-#### and Windows and MacOS scripts that:
+#### and a Chrome browser extension and Windows and MacOS scripts that:
   - Clients run to authenticate against the Cloudflare Worker to receive time-limited access to the desired resource
     - To change the default of 8 hours, please refer to the "Troubleshooting" section of this document
 ### Prerequisites
@@ -66,6 +66,16 @@ User access controls and multifactor authentication are important, but what if t
     - Apply this IP list to your SSLVPN portal allow rule
       - It is recommended to also add a static IP group or list that should always have access to the SSLVPN service
 ### Using/Testing
+#### Google Chrome
+1. Download the latest release and place the /Plugin directory somewhere within your user home directory
+2. Update manifest.json, adding your Worker URL to the host_permissions section
+   - Example: https://vpn-auth.organization.workers.dev/*
+3. Open Google Chrome and navigate to chrome://extensions
+4. Enable Developer Mode
+5. Click "Load Unpacked"
+6. Navigate to the Plugin directory and click "Select Folder"
+7. Authenticate by clicking on the puzzle icon at the right side of the address bar and selecting "Fort Knocks," entering a valid username and pre-shared key, and base URI (https://vpn-auth.organization.workers.dev for this example) when prompted
+8. Attempt an SSLVPN connection to verify functionality  
 #### Windows
 1. Download SSLVPNAuth.ps1 to a Windows computer (Windows 10 1803 and later, as curl.exe is required)
 2. Right-click the downloaded file, click "Properties"
