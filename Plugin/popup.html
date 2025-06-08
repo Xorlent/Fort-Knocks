@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Fort Knocks Authenticator</title>
+  <style>
+    body {
+      width: 300px;
+      padding: 15px;
+      font-family: Arial, sans-serif;
+    }
+    .form-group {
+      margin-bottom: 10px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    input {
+      width: 100%;
+      padding: 5px;
+      margin-bottom: 10px;
+    }
+    button {
+      width: 100%;
+      padding: 8px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .status {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 4px;
+    }
+    .success {
+      background-color: #dff0d8;
+      color: #3c763d;
+    }
+    .error {
+      background-color: #f2dede;
+      color: #a94442;
+    }
+    .warning {
+      background-color: #fcf8e3;
+      color: #8a6d3b;
+    }
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .checkbox-group input[type="checkbox"] {
+      width: auto;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-group">
+    <label for="username">Username:</label>
+    <input type="text" id="username" required>
+  </div>
+  <div class="form-group">
+    <label for="vpnAuth">Pre-shared Key:</label>
+    <input type="password" id="vpnAuth" required>
+  </div>
+  <div class="form-group">
+    <label for="uri">Request URL:</label>
+    <input type="url" id="uri" required>
+  </div>
+  <div class="form-group checkbox-group">
+    <input type="checkbox" id="saveCredentials">
+    <label for="saveCredentials">Save credentials</label>
+  </div>
+  <button id="authenticate">Authenticate</button>
+  <div id="status" class="status" style="display: none;"></div>
+  <script src="popup.js"></script>
+</body>
+</html> 
