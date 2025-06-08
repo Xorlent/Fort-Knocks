@@ -9,7 +9,8 @@ User access controls and multifactor authentication are important, but what if t
     - Includes strict brute force protection  
   - Produce a real-time IP allow list for a security device like a firewall to consume  
 #### and Windows and MacOS scripts that:
-  - Clients run to authenticate against the Cloudflare Worker to receive time-limited access to the desired resource  
+  - Clients run to authenticate against the Cloudflare Worker to receive time-limited access to the desired resource
+    - To change the default of 8 hours, please refer to the "Troubleshooting" section of this document
 ### Prerequisites
 1. A firewall that supports external IP threat feeds (most do, including Cisco, Palo Alto, Fortinet)
 2. A Cloudflare account (https://www.cloudflare.com/)
