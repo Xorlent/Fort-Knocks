@@ -85,7 +85,7 @@ User access controls and multifactor authentication are important, but what if t
 5. The PowerShell script will then complete a request and return the result
    - If authentication was successful, the client IP address should be added to the allowlist within 2 minutes
 6. Attempt an SSLVPN connection to verify functionality
-7. Once it is working, you can set this up to run automatically on login as a scheduled task, simply open an Administrator PowerShell window and run Install-VPNLoginTask.ps1 from the "/Windows Task" directory
+7. Once it is working, you can set this up to run automatically on login as a scheduled task, simply open an Administrator PowerShell window and run Install-SSLVPNLoginTask.ps1 from the "/Windows Task" directory
 #### MacOS
 1. Download SSLVPNAuth.sh to a MacOS computer
 2. In a terminal, navigate to the location of the SSLVPNAuth.sh script, then run:  
