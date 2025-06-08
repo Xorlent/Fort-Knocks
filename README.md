@@ -69,7 +69,8 @@ User access controls and multifactor authentication are important, but what if t
 #### Google Chrome
 1. Download the latest release and place the /Plugin directory somewhere within your user home directory
 2. Update manifest.json, adding your Worker URL to the host_permissions section
-   - Example: https://vpn-auth.organization.workers.dev/*
+   - Example: "https://vpn-auth.organization.workers.dev/*"
+   - If you forget this step, the plugin will give you guidance when you attempt authentication
 3. Open Google Chrome and navigate to chrome://extensions
 4. Enable Developer Mode
 5. Click "Load Unpacked"
