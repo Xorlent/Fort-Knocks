@@ -105,6 +105,10 @@ User access controls and multifactor authentication are important, but what if t
   - SSLVPNLoginTask.ps1 line 77
 
 ### Troubleshooting
+#### Windows says the script cannot be loaded because running scripts is disabled on this system
+- Run the following command in a PowerShell window:
+  ```set-executionpolicy remotesigned -Scope CurrentUser```
+
 #### I have a user that entered the wrong authentication details when running a client script and now they are rate-limited!
 - This rate limiting feature prevents brute force attempts
 - Once the user provides valid authentication details, the request will be processed as normal  
