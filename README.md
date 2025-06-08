@@ -8,7 +8,7 @@ User access controls and multifactor authentication are important, but what if t
   - Authenticate client requests for time-limited access to a protected service
     - Includes strict brute force protection  
   - Produce a real-time IP allow list for a security device like a firewall to consume  
-#### and a Chrome browser extension and Windows and MacOS scripts that:
+#### and a Chrome browser extension, Windows and MacOS scripts, and a Windows Task script that:
   - Clients run to authenticate against the Cloudflare Worker to receive time-limited access to the desired resource
     - To change the default of 8 hours, please refer to the "Troubleshooting" section of this document
 ### Prerequisites
@@ -85,6 +85,7 @@ User access controls and multifactor authentication are important, but what if t
 5. The PowerShell script will then complete a request and return the result
    - If authentication was successful, the client IP address should be added to the allowlist within 2 minutes
 6. Attempt an SSLVPN connection to verify functionality
+7. Once it is working, you can set this up to run automatically on login as a scheduled task, simply open an Administrator PowerShell window and run Install-VPNLoginTask.ps1 from the "/Windows Task" directory
 #### MacOS
 1. Download SSLVPNAuth.sh to a MacOS computer
 2. In a terminal, navigate to the location of the SSLVPNAuth.sh script, then run:  
@@ -101,6 +102,7 @@ User access controls and multifactor authentication are important, but what if t
   - background.js line 2
   - SSLVPNAuth.sh line 14
   - SSLVPNAuth.ps1 line 97
+  - SSLVPNLoginTask.ps1 line 77
 
 ### Troubleshooting
 #### I have a user that entered the wrong authentication details when running a client script and now they are rate-limited!
