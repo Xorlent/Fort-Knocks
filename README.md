@@ -108,7 +108,6 @@ User access controls and multifactor authentication are important, but what if t
 #### Windows says the script cannot be loaded because running scripts is disabled on this system
 - Run the following command in a PowerShell window:
   ```set-executionpolicy remotesigned -Scope CurrentUser```
-
 #### I have a user that entered the wrong authentication details when running a client script and now they are rate-limited!
 - This rate limiting feature prevents brute force attempts
 - Once the user provides valid authentication details, the request will be processed as normal  
@@ -116,6 +115,8 @@ User access controls and multifactor authentication are important, but what if t
 - This solution assumes we are dealing with IPv4.  To allow IPv6 client addresses, simply remove the "-4" immediately following the curl.exe command in each of the client scripts.
 #### I want to adjust the lifetime for successful authentication
 - Change the expirationTtl value (in seconds) found on line 124 in vpn-knocking.js  
+#### On Windows 11 the PowerShell script fails with a HTTP 000 code
+- Update Windows!  In 2024, Microsoft compiled a buggy version of curl.exe in Windows.
 #### Nothing is working
 - Did you add valid usernames to the SSLUSERS KV store?  See step 2 under, "Cloudflare Setup"
 - The pre-shared key value should be no more than 255 printable characters
