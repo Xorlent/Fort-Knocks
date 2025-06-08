@@ -110,9 +110,6 @@ $hashHex = ConvertTo-HexString -Bytes $hashBytes
 # Construct the URL
 $uri = "$baseUri/$hashHex"
 
-# Force TLS 1.2
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-
 # Make the request using curl with IPv4 flag
 try {
     $response = curl.exe -4 -s -w "%{http_code}" -H "VPNAuth: $vpnAuth" $uri
