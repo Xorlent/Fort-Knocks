@@ -111,7 +111,7 @@ User access controls and multifactor authentication are important, but what if t
 #### I have a user that entered the wrong authentication details when running a client script and now they are rate-limited!
 - This rate limiting feature prevents brute force attempts
 - Once the user provides valid authentication details, the request will be processed as normal  
-#### The Authorized IP list shows IPv4 addresses only and clients are connecting via IPv6
+#### The Authorized IP list shows IPv4 addresses only and clients are connecting to my protected service via IPv6
 - This solution assumes we are dealing with IPv4.  To allow IPv6 client addresses, simply remove the "-4" immediately following the curl.exe command in each of the client scripts.
 #### I want to adjust the lifetime for successful authentication
 - Change the expirationTtl value (in seconds) found on line 124 in vpn-knocking.js  
