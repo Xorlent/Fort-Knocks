@@ -115,6 +115,8 @@ User access controls and multifactor authentication are important, but what if t
 - This solution assumes we are dealing with IPv4.  To allow IPv6 client addresses, simply remove the "-4" immediately following the curl.exe command in each of the client scripts.
 #### I want to adjust the lifetime for successful authentication
 - Change the expirationTtl value (in seconds) found on line 124 in vpn-knocking.js  
+#### If a user authenticates again during the lifetime of an existing autenticated session, will it extend their authorization?
+- Yes, for example: A user authenticates and then authenticates again one hour later; the expiration timer will begin again from the start of the second authentication 
 #### On Windows 11 the PowerShell script fails with a HTTP 000 code
 - Update Windows!  In 2024, Microsoft compiled a buggy version of curl.exe in Windows.
 #### Nothing is working
