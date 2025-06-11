@@ -66,7 +66,7 @@ User access controls and multifactor authentication are important, but what if t
     - Apply this IP list to your SSLVPN portal allow rule
       - It is recommended to also add a static IP group or list that should always have access to the SSLVPN service
 ### Using/Testing
-#### Google Chrome
+#### Google Chrome (IPv6 only)
 1. Download the latest release and place the /Plugin directory somewhere within your user home directory
 2. Update manifest.json, adding your Worker URL to the host_permissions section
    - Example: "https://vpn-auth.organization.workers.dev/*"
